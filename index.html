@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ज्ञाानालय कोचिंग - ऑनलाइन टेस्ट पोर्टल</title>
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-color: #1f2937;
+            --border-color: #e5e7eb;
+            --admin-color: #059669;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 800px;
+            padding: 30px;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        header h1 {
+            color: var(--primary-color);
+            margin: 0 0 5px 0;
+            font-size: 24px;
+        }
+
+        header p {
+            margin: 0;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 15px;
+        }
+
+        .admin-btn {
+            background-color: var(--admin-color);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* क्लास और सब्जेक्ट ग्रिड */
+        .grid-section {
+            margin-bottom: 20px;
+        }
+
+        .grid-section h3 {
+            color: #374151;
+            font-size: 16px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 5px;
+            margin-bottom: 12px;
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px;
+        }
+
+        .card-item {
+            background: #f9fafb;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .card-item:hover {
+            border-color: var(--primary-color);
+            background-color: #e0e7ff;
+        }
+
+        input[type="text"], input[type="password"], textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            font-size: 15px;
+        }
+
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .quiz-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #4b5563;
+        }
+
+        .timer {
+            background-color: #fee2e2;
+            color: #991b1b;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        .question-box {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 25px 0;
+        }
+
+        .option-item {
+            background-color: #f9fafb;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px 15px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 16px;
+        }
+
+        .option-item:hover {
+            border-color: var(--primary-color);
+            background-color: #e0e7ff;
+        }
+
+        .option-item.selected {
+            border-color: var(--primary-color);
+            background-color: #e0e7ff;
+            color: var(--primary-hover);
+            font-weight: 600;
+        }
+
+        .result-card {
+            text-align: center;
+        }
+
+        .score-display {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 15px 0;
+        }
+
+        .leaderboard-section {
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .leaderboard-table th, .leaderboard-table td {
+            padding: 10px;
+            border-bottom: 1px solid var(--border-color);
+            text-align: left;
+            font-size: 14px;
+        }
+
+        .leaderboard-table th {
+            background-color: #f9fafb;
+            color: #4b5563;
+        }
+
+        .back-btn {
+            background-color: #6b7280;
+            margin-top: 10px;
+        }
+        .back-btn:hover {
+            background-color: #4b5563;
+        }
+
+        .admin-panel {
+            background: #fdf2f8;
+            border: 2px solid #f472b6;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    
+    <!-- टॉप एडमिन बटन -->
+    <div class="top-bar" id="top-bar-div">
+        <button class="admin-btn" onclick="openAdminLogin()">🔒 Admin Login</button>
+    </div>
+
+    <!-- 1. होम पेज: वर्ग (Class) चयन स्क्रीन -->
+    <div id="home-screen">
+        <header>
+            <h1>ज्ञाानालय कोचिंग</h1>
+            <p>ऑनलाइन टेस्ट पोर्टल - अपना वर्ग (Class) चुनें</p>
+        </header>
+        
+        <div class="grid-section">
+            <h3>विद्यार्थी वर्ग चुनें:</h3>
+            <div class="cards-container">
+                <div class="card-item" onclick="selectClass('class7')">वर्ग - 7</div>
+                <div class="card-item" onclick="selectClass('class8')">वर्ग - 8</div>
+                <div class="card-item" onclick="selectClass('class9')">वर्ग - 9</div>
+                <div class="card-item" onclick="selectClass('class10')">वर्ग - 10</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. विषय (Subject) चयन स्क्रीन -->
+    <div id="subject-screen" class="hidden">
+        <header>
+            <h1 id="selected-class-title">विषय चुनें</h1>
+            <p>ज्ञाानालय कोचिंग</p>
+        </header>
+        
+        <div class="grid-section">
+            <h3>विषय चुनें:</h3>
+            <div class="cards-container">
+                <div class="card-item" onclick="selectSubject('hindi')">हिंदी (Hindi)</div>
+                <div class="card-item" onclick="selectSubject('sanskrit')">संस्कृत (Sanskrit)</div>
+                <div class="card-item" onclick="selectSubject('math')">गणित (Math)</div>
+                <div class="card-item" onclick="selectSubject('science')">विज्ञान (Science)</div>
+                <div class="card-item" onclick="selectSubject('english')">अंग्रेजी (English)</div>
+            </div>
+        </div>
+        <button class="btn back-btn" onclick="goHome()">वर्ग चयन पर लौटें</button>
+    </div>
+
+    <!-- एडमिन लॉगिन स्क्रीन -->
+    <div id="admin-login-screen" class="hidden name-box">
+        <header>
+            <h1>एडमिन लॉगिन</h1>
+            <p>ज्ञाानालय कोचिंग प्रबंधन कक्ष</p>
+        </header>
+        <p style="color: #4b5563; margin-bottom: 20px;">कृपया एडमिन पासवर्ड दर्ज करें:</p>
+        <input type="password" id="admin-pass-input" placeholder="पासवर्ड (roshan123)..." autocomplete="off">
+        <button class="btn" onclick="verifyAdminPassword()">लॉगिन करें</button>
+        <button class="btn back-btn" onclick="goHome()">होम पर लौटें</button>
+    </div>
+
+    <!-- एडमिन डैशबोर्ड स्क्रीन (बल्क अपलोड) -->
+    <div id="admin-dashboard" class="hidden">
+        <header>
+            <h1>एडमिन पैनल (Bulk Upload)</h1>
+            <p>एक बार में पूरे सेट का कोड/टेक्स्ट पेस्ट करें</p>
+        </header>
+        <div class="admin-panel">
+            <h3>📥 बल्क प्रश्न अपलोड करें</h3>
+            
+            <label>वर्ग (Class) चुनें:</label>
+            <select id="admin-class">
+                <option value="class7">वर्ग 7</option>
+                <option value="class8">वर्ग 8</option>
+                <option value="class9">वर्ग 9</option>
+                <option value="class10" selected>वर्ग 10</option>
+            </select>
+
+            <label>विषय (Subject) चुनें:</label>
+            <select id="admin-subject">
+                <option value="hindi">हिंदी</option>
+                <option value="sanskrit">संस्कृत</option>
+                <option value="math">गणित</option>
+                <option value="science">विज्ञान</option>
+                <option value="english">अंग्रेजी</option>
+            </select>
+
+            <label>टेस्ट का नाम / वर्ष (जैसे: 2025 प्रथम पाली या Set 1):</label>
+            <input type="text" id="admin-test-title" placeholder="जैसे: हिंदी 2025 सेट 1">
+
+            <label>सारे प्रश्न यहाँ पेस्ट करें (जिसमें प्रश्न और (A),(B),(C),(D) विकल्प हों):</label>
+            <textarea id="admin-bulk-text" rows="8" placeholder="प्रश्न 1. ... 
+(A) ... 
+(B) ... 
+(C) ... 
+(D) ... 
+उत्तर: (A) ..."></textarea>
+
+            <button class="btn" onclick="processBulkUpload()">सारे प्रश्न सुरक्षित करें</button>
+        </div>
+        <button class="btn back-btn" onclick="goHome()">होम पेज पर लौटें</button>
+    </div>
+
+    <!-- 3. छात्र नाम दर्ज करने की स्क्रीन -->
+    <div id="name-screen" class="hidden name-box">
+        <header>
+            <h1 id="selected-test-title">टेस्ट</h1>
+            <p>ज्ञाानालय कोचिंग</p>
+        </header>
+        <p style="color: #4b5563; margin-bottom: 20px;">टेस्ट शुरू करने के लिए अपना पूरा नाम दर्ज करें:</p>
+        <input type="text" id="student-name" placeholder="अपना पूरा नाम लिखें..." autocomplete="off">
+        <button class="btn" id="start-btn">आगे बढ़ें</button>
+        <button class="btn back-btn" onclick="selectClass(currentClass)">विषय चयन पर लौटें</button>
+    </div>
+
+    <!-- 4. क्विज़ स्क्रीन -->
+    <div id="quiz-screen" class="hidden">
+        <header>
+            <h1 id="quiz-header-title">ज्ञाानालय कोचिंग टेस्ट</h1>
+        </header>
+        <div class="quiz-info">
+            <span id="question-count">प्रश्नों: 1 / 1</span>
+            <div class="timer" id="timer">समय: 60:00</div>
+        </div>
+        <div class="question-box" id="question-text">प्रश्न यहाँ दिखाई देगा...</div>
+        <ul class="options-list" id="options-list"></ul>
+        <button class="btn" id="next-btn">अगला प्रश्न</button>
+    </div>
+
+    <!-- 5. परिणाम और लीडरबोर्ड स्क्रीन -->
+    <div id="result-screen" class="hidden result-card">
+        <header>
+            <h1>टेस्ट समाप्त!</h1>
+            <p>ज्ञाानालय कोचिंग लीडरबोर्ड</p>
+        </header>
+        <p>उत्कृष्ट प्रयास, <span id="display-name" style="font-weight: bold;"></span>!</p>
+        <div class="score-display" id="final-score">आपका स्कोर: 0 / 0</div>
+        <button class="btn" id="restart-btn">होम पेज पर लौटें</button>
+
+        <div class="leaderboard-section">
+            <h3>टॉपर्स लीडरबोर्ड 🏆</h3>
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>रैंक</th>
+                        <th>नाम</th>
+                        <th>स्कोर</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboard-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // डिफ़ॉल्ट डेटाबेस (अगर एडमिन कुछ न डाले तो सैंपल प्रश्न)
+    let db = JSON.parse(localStorage.getItem("gyanalay_master_db")) || {
+        class10: {
+            hindi: [
+                {
+                    title: "हिंदी - 2025 मॉडल सेट",
+                    time: 3600,
+                    questions: [
+                        { q: "'दोष' शब्द का विशेषण है-", options: ["(A) दूषित", "(B) दोषिल", "(C) दोषियालु", "(D) दुषांत"], answer: 0 },
+                        { q: "'नेह' शब्द का विशेषण है-", options: ["(A) नाहक", "(B) नास्तिक", "(C) नेही", "(D) नाशक"], answer: 2 }
+                    ]
+                }
+            ]
+        }
+    };
+
+    let currentClass = "";
+    let currentSubject = "";
+    let currentTestObj = null;
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let studentName = "";
+    let timer;
+    let timeLeft = 0;
+    let selectedOption = null;
+
+    function openAdminLogin() {
+        document.getElementById("home-screen").classList.add("hidden");
+        document.getElementById("top-bar-div").classList.add("hidden");
+        document.getElementById("admin-login-screen").classList.remove("hidden");
+    }
+
+    function verifyAdminPassword() {
+        let pass = document.getElementById("admin-pass-input").value;
+        if (pass === "roshan123") {
+            document.getElementById("admin-login-screen").classList.add("hidden");
+            document.getElementById("admin-dashboard").classList.remove("hidden");
+            document.getElementById("admin-pass-input").value = "";
+        } else {
+            alert("गलत पासवर्ड!");
+        }
+    }
+
+    // बल्क अपलोड प्रक्रिया (स्मार्ट पार्सर)
+    function processBulkUpload() {
+        let cls = document.getElementById("admin-class").value;
+        let sub = document.getElementById("admin-subject").value;
+        let title = document.getElementById("admin-test-title").value.trim();
+        let rawText = document.getElementById("admin-bulk-text").value.trim();
+
+        if (!title || !rawText) {
+            alert("कृपया टेस्ट का नाम और प्रश्न टेक्स्ट दोनों भरें!");
+            return;
+        }
+
+        // सामान्य तरीके से टेक्स्ट को प्रश्नों में विभाजित करें
+        let lines = rawText.split('\n');
+        let questionsList = [];
+        let currentQ = null;
+        let currentOpts = [];
+        let correctAns = 0;
+
+        lines.forEach(line => {
+            line = line.trim();
+            if (!line) return;
+
+            if (line.toLowerCase().startsWith("प्रश्न") || line.match(/^\d+[\.\)]/)) {
+                if (currentQ) {
+                    questionsList.push({ q: currentQ, options: currentOpts, answer: correctAns });
+                }
+                currentQ = line.replace(/^(प्रश्न\s*\d+[\.\:]?|\d+[\.\)])/, '').trim();
+                currentOpts = [];
+                correctAns = 0;
+            } else if (line.match(/^\([A-Da-d]\)/)) {
+                currentOpts.push(line);
+            } else if (line.toLowerCase().includes("उत्तर") || line.toLowerCase().includes("ans")) {
+                if (line.includes("B") || line.includes("b")) correctAns = 1;
+                else if (line.includes("C") || line.includes("c")) correctAns = 2;
+                else if (line.includes("D") || line.includes("d")) correctAns = 3;
+                else correctAns = 0;
+            }
+        });
+
+        if (currentQ) {
+            questionsList.push({ q: currentQ, options: currentOpts.length ? currentOpts : ["(A) विकल्प 1", "(B) विकल्प 2", "(C) विकल्प 3", "(D) विकल्प 4"], answer: correctAns });
+        }
+
+        if (questionsList.length === 0) {
+            alert("प्रश्न सही फॉर्मेट में नहीं मिले। कृपया सुनिश्चित करें कि प्रश्न 'प्रश्न 1' या नंबर से शुरू हों।");
+            return;
+        }
+
+        if (!db[cls]) db[cls] = {};
+        if (!db[cls][sub]) db[cls][sub] = [];
+
+        db[cls][sub].push({
+            title: title,
+            time: 3600,
+            questions: questionsList
+        });
+
+        localStorage.setItem("gyanalay_master_db", JSON.stringify(db));
+        alert(`सफलतापूर्वक ${questionsList.length} प्रश्न अपलोड हो गए हैं!`);
+        document.getElementById("admin-bulk-text").value = "";
+        document.getElementById("admin-test-title").value = "";
+    }
+
+    function selectClass(cls) {
+        currentClass = cls;
+        document.getElementById("selected-class-title.innerText") = "वर्ग चुने गए: " + cls.toUpperCase();
+        document.getElementById("home-screen").classList.add("hidden");
+        document.getElementById("name-screen").classList.add("hidden");
+        document.getElementById("subject-screen").classList.remove("hidden");
+        document.getElementById("top-bar-div").classList.add("hidden");
+    }
+
+    function selectSubject(sub) {
+        currentSubject = sub;
+        if (!db[currentClass] || !db[currentClass][currentSubject] || db[currentClass][currentSubject].length === 0) {
+            alert("इस विषय के लिए अभी कोई टेस्ट सेट अपलोड नहीं किया गया है। एडमिन पैनल से जोड़ें।");
+            return;
+        }
+        // हाल ही में जोड़ा गया सेट या डिफ़ॉल्ट सेट चुनें
+        currentTestObj = db[currentClass][currentSubject][0]; 
+        document.getElementById("selected-test-title").innerText = `${currentClass.toUpperCase()} - ${sub.toUpperCase()} टेस्ट`;
+        document.getElementById("subject-screen").classList.add("hidden");
+        document.getElementById("name-screen").classList.remove("hidden");
+    }
+
+    function goHome() {
+        document.getElementById("home-screen").classList.remove("hidden");
+        document.getElementById("subject-screen").classList.add("hidden");
+        document.getElementById("name-screen").classList.add("hidden");
+        document.getElementById("admin-login-screen").classList.add("hidden");
+        document.getElementById("admin-dashboard").classList.add("hidden");
+        document.getElementById("result-screen").classList.add("hidden");
+        document.getElementById("top-bar-div").classList.remove("hidden");
+        document.getElementById("student-name").value = "";
+    }
+
+    document.getElementById("start-btn").addEventListener("click", () => {
+        studentName = document.getElementById("student-name").value.trim();
+        if (!studentName) {
+            alert("कृपया अपना नाम दर्ज करें!");
+            return;
+        }
+        timeLeft = currentTestObj.time;
+        document.getElementById("name-screen").classList.add("hidden");
+        document.getElementById("quiz-screen").classList.remove("hidden");
+        document.getElementById("quiz-header-title").innerText = "ज्ञाानालय - " + currentTestObj.title;
+        
+        currentQuestionIndex = 0;
+        score = 0;
+        startTimer();
+        loadQuestion();
+    });
+
+    function startTimer() {
+        clearInterval(timer);
+        timer = setInterval(() => {
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                endQuiz();
+            } else {
+                timeLeft--;
+                let minutes = Math.floor(timeLeft / 60);
+                let seconds = timeLeft % 60;
+                document.getElementById("timer").innerText = `समय: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            }
+        }, 1000);
+    }
+
+    function loadQuestion() {
+        selectedOption = null;
+        let qList = currentTestObj.questions;
+        let q = qList[currentQuestionIndex];
+        document.getElementById("question-count").innerText = `प्रश्नों: ${currentQuestionIndex + 1} / ${qList.length}`;
+        document.getElementById("question-text").innerText = `${currentQuestionIndex + 1}. ${q.q}`;
+        
+        let optionsList = document.getElementById("options-list");
+        optionsList.innerHTML = "";
+
+        q.options.forEach((opt, index) => {
+            let li = document.createElement("li");
+            li.className = "option-item";
+            li.innerText = opt;
+            li.addEventListener("click", () => {
+                document.querySelectorAll(".option-item").forEach(el => el.classList.remove("selected"));
+                li.classList.add("selected");
+                selectedOption = index;
+            });
+            optionsList.appendChild(li);
+        });
+    }
+
+    document.getElementById("next-btn").addEventListener("click", () => {
+        if (selectedOption === null) {
+            alert("कृपया कोई एक विकल्प चुनें!");
+            return;
+        }
+
+        if (selectedOption === currentTestObj.questions[currentQuestionIndex].answer) {
+            score++;
+        }
+
+        currentQuestionIndex++;
+        if (currentQuestionIndex < currentTestObj.questions.length) {
+            loadQuestion();
+        } else {
+            clearInterval(timer);
+            endQuiz();
+        }
+    });
+
+    function endQuiz() {
+        document.getElementById("quiz-screen").classList.add("hidden");
+        document.getElementById("result-screen").classList.remove("hidden");
+        document.getElementById("display-name").innerText = studentName;
+        document.getElementById("final-score").innerText = `आपका स्कोर: ${score} / ${currentTestObj.questions.length}`;
+
+        saveAndShowLeaderboard(studentName, score, currentTestObj.title);
+    }
+
+    function saveAndShowLeaderboard(name, sc, testTitle) {
+        let storageKey = "gyanalay_lb_" + testTitle;
+        let leaderboard = JSON.parse(localStorage.getItem(storageKey)) || [];
+        leaderboard.push({ name: name, score: sc });
+        leaderboard.sort((a, b) => b.score - a.score);
+        leaderboard = leaderboard.slice(0, 10);
+        localStorage.setItem(storageKey, JSON.stringify(leaderboard));
+
+        let leaderboardBody = document.getElementById("leaderboard-body");
+        leaderboardBody.innerHTML = "";
+        leaderboard.forEach((item, index) => {
+            let tr = document.createElement("tr");
+            tr.innerHTML = `<td>#${index + 1}</td><td>${item.name}</td><td>${item.score} / ${currentTestObj.questions.length}</td>`;
+            leaderboardBody.appendChild(tr);
+        });
+    }
+
+    document.getElementById("restart-btn").addEventListener("click", () => {
+        document.getElementById("result-screen").classList.add("hidden");
+        goHome();
+    });
+</script>
+
+</body>
+</html>
